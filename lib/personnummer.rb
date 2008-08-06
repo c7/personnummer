@@ -2,24 +2,31 @@ require 'date'
 
 class Personnummer
   # Public readonly attributes
-  attr_reader :age, :born, :region
+  attr_reader :age, :born, :region, :control_digit
   
 	def initialize(number)
 	  @valid = false
 	  
+	  # Store the initial number
+    @number = number
+	  
 	  # Match the number
-	  if number.match(/(\d{2})(\d{2})(\d{2})([\-\+])(\d{3})(\d{1})/)
-	    # Store the initial number
-	    @number = number
+	  if number.match(/(\d{2})(\d{2})(\d{2})([\-\+])(\d{3})(\d{0,1})/)
 	    
-	    # Get the different parts
+	    # Calculate the control digit based on the birth date and serial number
+	    @control_digit = luhn_algorithm("#{$~[1]}#{$~[2]}#{$~[3]}#{$~[5]}")
+	    
+	    # Get the different parts of the number
 	    year     = $~[1].to_i
 	    month    = $~[2].to_i
 	    day      = $~[3].to_i
 	    divider  = $~[4]
-	    code     = $~[5].to_i
-	    checksum = $~[6].to_i 
+	    serial   = $~[5].to_i
 	    
+	    # Make the personnummer valid if the checksum is correct
+	    @valid = true if @control_digit == $~[6].to_i && !$~[6].empty?
+	    
+	    # Get the current date	    
 	    today = Date.today
 	    
 	    # Decide which century corresponds to the number
@@ -35,12 +42,17 @@ class Personnummer
 	    
 	    # Get the date the person was born
   	  @born   = Date.parse("#{century+year}-#{month}-#{day}")
-  	  @region = region_name(code)
   	  
-  	  # Naive age calculation
+  	  # Get the region name
+  	  @region = region_name(serial)
+  	  
+  	  # Naïve age calculation
   	  @age = today.year - @born.year
   	  
-  	  @male = true
+  	  # Check if the person is female based the serial (even == female)
+  	  @female = (serial % 2 == 0)
+    else
+      raise Exception.new, "The supplied personnummer is invalid" 
     end
 	end
 	
@@ -53,15 +65,50 @@ class Personnummer
   end
 	
 	def male?
-	  @male
+	  !@female
   end
   
   def female?
-    !@male
+    @female
   end
 
 private 
+
+  def luhn_algorithm(number)
+    multiplications = []
+    
+    number.split(//).each_with_index do |digit, i|
+      if i % 2 == 0
+          multiplications << digit.to_i*2
+        else
+          multiplications << digit.to_i
+        end
+    end
+    
+    sum = 0
+    multiplications.each do |number|
+      number.to_s.each_byte do |character|
+        sum += character.chr.to_i
+      end
+    end
+
+    if sum % 10 == 0
+      control_digit = 0
+    else
+      control_digit = (sum / 10 + 1) * 10 - sum
+    end
+    
+    control_digit
+  end
+
   def region_name(code)
+    
+    # Don't return a region name if the person was born before 1990 
+	  # (When the previous region code was changed to a serial number)
+    if @born.year > 1990
+      return ''
+    end
+    
     case code
       when 000..139: 'Stockholms Län'
       when 140..159: 'Uppsala län'
@@ -72,11 +119,11 @@ private
       when 290..319: 'Kalmar län'
       when 320..329: 'Gotlands län'
       when 330..349: 'Blekinge län'
-      when 350..159: 'Kristianstads län'
-      when 390..159: 'Malmöhus län'
-      when 460..159: 'Hallands län'
-      when 480..159: 'Göteborgs och Bohus län'
-      when 550..159: 'Älvsborgs län'
+      when 350..389: 'Kristianstads län'
+      when 390..459: 'Malmöhus län'
+      when 460..479: 'Hallands län'
+      when 480..549: 'Göteborgs och Bohus län'
+      when 550..589: 'Älvsborgs län'
       when 590..619: 'Skaraborgs län'
       when 620..159: 'Värmlands län'
       when 650..659: 'Födda utomlands'

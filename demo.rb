@@ -5,11 +5,17 @@
 # Instead of:
 require 'lib/personnummer'
 
+# Valid personnummer
 p = Personnummer.new('830428-5912')
+designation = (p.male?) ? 'His' : 'Her'
+puts "#{designation} control digit is: #{p.control_digit}"
 
-puts "valid?: #{p.valid?}"
-puts "age: #{p.age}"
-puts "born.year: #{p.born.year}"
-puts "region: #{p.region}"
-puts "male?: #{p.male?}"
-puts "to_s: #{p}"
+if p.valid?
+  designation = (p.male?) ? 'He' : 'She'
+  puts "#{designation} was born in #{p.region} aproximately #{p.age} years ago" if p.region
+end
+
+# Incomplete personnummer
+p = Personnummer.new('870312-594')
+designation = (p.male?) ? 'His' : 'Her'
+puts "#{designation} control digit is: #{p.control_digit}"
