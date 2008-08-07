@@ -6,7 +6,7 @@
 require 'lib/personnummer'
 
 # Valid personnummer
-p = Personnummer.new('830428-5912')
+p = Personnummer.new(8304285912)
 designation = (p.male?) ? 'His' : 'Her'
 puts "#{designation} control digit is: #{p.control_digit}"
 

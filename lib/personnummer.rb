@@ -5,13 +5,14 @@ class Personnummer
   attr_reader :age, :born, :region, :control_digit
   
 	def initialize(number)
+	  
 	  @valid = false
 	  
 	  # Store the initial number
-    @number = number
+    @number = number.to_s
 	  
 	  # Match the number
-	  if number.match(/(\d{2})(\d{2})(\d{2})([\-\+])(\d{3})(\d{0,1})/)
+	  if @number.match(/(\d{2})(\d{2})(\d{2})([\-\+]{0,1})(\d{3})(\d{0,1})/)
 	    
 	    # Calculate the control digit based on the birth date and serial number
 	    @control_digit = luhn_algorithm("#{$~[1]}#{$~[2]}#{$~[3]}#{$~[5]}")
@@ -22,6 +23,9 @@ class Personnummer
 	    day      = $~[3].to_i
 	    divider  = $~[4]
 	    serial   = $~[5].to_i
+	    
+	    # Set default divider if not present
+	    divider ||= '-'
 	    
 	    # Make the personnummer valid if the checksum is correct
 	    @valid = true if @control_digit == $~[6].to_i && !$~[6].empty?
