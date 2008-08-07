@@ -103,7 +103,7 @@ private
 
   def region_name(code)
     
-    # Don't return a region name if the person was born before 1990 
+    # Don't return a region name if the person was born after 1990 
 	  # (When the previous region code was changed to a serial number)
     if @born.year > 1990
       return ''
