@@ -1,5 +1,9 @@
+0.0.3 Released
+  
+  2010-04-19: (Less) naïve age calculation
+
 0.0.2 Released
 
-2008-08-07: Number argument can now be a Fixnum or String
+  2008-08-07: Number argument can now be a Fixnum or String
 
 0.0.1 Released
