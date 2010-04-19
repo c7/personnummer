@@ -50,9 +50,9 @@ class Personnummer
   	  # Get the region name
   	  @region = region_name(serial)
   	  
-  	  # Naïve age calculation
-  	  @age = today.year - @born.year
-  	  
+  	  # (Less) naïve age calculation
+  	  @age = ((today - @born).to_i/365)
+  	    	  
   	  # Check if the person is female based the serial (even == female)
   	  @female = (serial % 2 == 0)
     else
