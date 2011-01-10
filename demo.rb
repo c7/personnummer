@@ -3,7 +3,7 @@
 # require 'personnummer'
 #
 # Instead of:
-require 'lib/personnummer'
+require './lib/personnummer'
 
 # Valid personnummer
 p = Personnummer.new(8304285912)
