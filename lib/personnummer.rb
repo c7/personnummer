@@ -56,7 +56,7 @@ class Personnummer
       # Check if the person is female based the serial (even == female)
       @female = (serial % 2 == 0)
     else
-      raise Exception.new, "The supplied personnummer is invalid"
+      raise ArgumentError.new, "The supplied personnummer is invalid"
     end
   end
 
