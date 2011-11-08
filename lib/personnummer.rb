@@ -1,9 +1,9 @@
-# encoding: utf-8
+# -*- encoding: utf-8 -*-
 require 'date'
 
 class Personnummer
   # Public readonly attributes
-  attr_reader :age, :born, :region, :control_digit
+  attr_reader :born, :region, :control_digit
 
   def initialize(number)
 
@@ -50,13 +50,18 @@ class Personnummer
       # Get the region name
       @region = region_name(serial)
 
-      # (Less) naïve age calculation
-      @age = ((today - @born).to_i/365)
-
       # Check if the person is female based the serial (even == female)
       @female = (serial % 2 == 0)
     else
       raise ArgumentError.new, "The supplied personnummer is invalid"
+    end
+  end
+
+  def age
+    if Date.today > @born
+      (Date.today - @born).to_i/365
+    else
+      0
     end
   end
 
