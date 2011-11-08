@@ -134,7 +134,7 @@ private
       when 480..549 then 'Göteborgs och Bohus län'
       when 550..589 then 'Älvsborgs län'
       when 590..619 then 'Skaraborgs län'
-      when 620..159 then 'Värmlands län'
+      when 620..649 then 'Värmlands län'
       when 650..659 then 'Födda utomlands'
       when 660..689 then 'Örebro län'
       when 690..709 then 'Västmanlands län'
