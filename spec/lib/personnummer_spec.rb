@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 require 'spec_helper'
 require 'personnummer'
+require 'timecop'
 
 describe Personnummer do
   describe "initialize" do
@@ -24,19 +25,37 @@ describe Personnummer do
   end
 
   describe "age" do
-    xit "works" do
+    it "calculates age correctly" do
+      p = Personnummer.new('900101-001')
+
+      Timecop.freeze(Date.parse('1980-01-01')) do
+        p.age.should == 0
+      end
+      Timecop.freeze(Date.parse('1990-01-01')) do
+        p.age.should == 0
+      end
+      Timecop.freeze(Date.parse('2000-01-01')) do
+        p.age.should == 10
+      end
+      Timecop.freeze(Date.parse('2090-01-01')) do
+        p.age.should == 100
+      end
     end
   end
 
   describe "born" do
     it "returns the correct date" do
-      Personnummer.new(900101001).born.should == Date.parse("1990-01-01")
+      Timecop.freeze(Date.parse('2010-01-01')) do
+        Personnummer.new('900101-001').born.should == Date.parse('1990-01-01')
+        Personnummer.new('010101-001').born.should == Date.parse('2001-01-01')
+        Personnummer.new('100101+001').born.should == Date.parse('1810-01-01')
+      end
     end
   end
 
   describe "region" do
     it "returns '' for persons born on or after 1991-01-01" do
-      Personnummer.new(910101001).region.should == ''
+      Personnummer.new('910101-001').region.should == ''
     end
 
     it "returns the correct region for persons born before 1991-01-01" do
