@@ -1,18 +1,16 @@
-# encoding: utf-8
+# -*- encoding: utf-8 -*-
 require 'date'
 
 class Personnummer
   # Public readonly attributes
-  attr_reader :age, :born, :region, :control_digit
+  attr_reader :born, :region, :control_digit
 
   def initialize(number)
-
     @valid = false
-    # Store the initial number
-    @number = number.to_s
 
     # Match the number
-    if @number.match(/(\d{2})(\d{2})(\d{2})([\-\+]{0,1})(\d{3})(\d{0,1})/)
+    number = number.to_s
+    if number.match(/(\d{2})(\d{2})(\d{2})([\-\+]{0,1})(\d{3})(\d{0,1})/)
 
       # Calculate the control digit based on the birth date and serial number
       @control_digit = luhn_algorithm("#{$~[1]}#{$~[2]}#{$~[3]}#{$~[5]}")
@@ -21,11 +19,13 @@ class Personnummer
       year     = $~[1].to_i
       month    = $~[2].to_i
       day      = $~[3].to_i
-      divider  = $~[4]
-      serial   = $~[5].to_i
+      @divider  = $~[4]
+      @serial   = $~[5].to_i
 
       # Set default divider if not present
-      divider ||= '-'
+      if @divider.empty?
+        @divider = '-'
+      end
 
       # Make the personnummer valid if the checksum is correct
       @valid = true if @control_digit == $~[6].to_i && !$~[6].empty?
@@ -34,11 +34,11 @@ class Personnummer
       today = Date.today
 
       # Decide which century corresponds to the number
-      if year < (today.year-2000) && divider == '-'
+      if year < (today.year-2000) && @divider == '-'
         century = 2000
-      elsif year < (today.year-2000) && divider == '+'
+      elsif year < (today.year-2000) && @divider == '+'
         century = 1900
-      elsif divider == '+'
+      elsif @divider == '+'
         century = 1800
       else
         century = 1900
@@ -48,20 +48,25 @@ class Personnummer
       @born   = Date.parse("#{century+year}-#{month}-#{day}")
 
       # Get the region name
-      @region = region_name(serial)
-
-      # (Less) naïve age calculation
-      @age = ((today - @born).to_i/365)
+      @region = region_name(@serial)
 
       # Check if the person is female based the serial (even == female)
-      @female = (serial % 2 == 0)
+      @female = (@serial % 2 == 0)
     else
-      raise Exception.new, "The supplied personnummer is invalid"
+      raise ArgumentError.new, "The supplied personnummer is invalid"
+    end
+  end
+
+  def age
+    if Date.today > @born
+      (Date.today - @born).to_i/365
+    else
+      0
     end
   end
 
   def to_s
-    @number
+    "%s%s%03d%d" % [@born.strftime("%y%m%d"), @divider, @serial, @control_digit]
   end
 
   def valid?
@@ -129,7 +134,7 @@ private
       when 480..549 then 'Göteborgs och Bohus län'
       when 550..589 then 'Älvsborgs län'
       when 590..619 then 'Skaraborgs län'
-      when 620..159 then 'Värmlands län'
+      when 620..649 then 'Värmlands län'
       when 650..659 then 'Födda utomlands'
       when 660..689 then 'Örebro län'
       when 690..709 then 'Västmanlands län'
