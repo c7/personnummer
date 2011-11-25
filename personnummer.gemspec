@@ -3,10 +3,10 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "personnummer"
-  s.version     = "0.0.4"
-  s.authors     = ["Peter Hellberg"]
+  s.version     = "0.0.5"
+  s.authors     = ["Peter Hellberg", "Victor Koronen"]
   s.email       = ["peter@c7.se"]
-  s.homepage    = "http://c7.se/code/personnummer"
+  s.homepage    = "https://github.com/c7/personnummer/"
   s.summary     = %q{Personnummer handles validation of Swedish personal identity numbers.}
   s.description = %q{Personnummer handles validation of Swedish personal identity numbers.}
 
