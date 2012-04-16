@@ -10,7 +10,7 @@ class Personnummer
 
     # Match the number
     number = number.to_s
-    if number.match(/(\d{2})(\d{2})(\d{2})([\-\+]{0,1})(\d{3})(\d{0,1})/)
+    if number.match(/(?:18|19|20|21){0,1}(\d{2})(\d{2})(\d{2})([\-\+]{0,1})(\d{3})(\d{0,1})/)
 
       # Calculate the control digit based on the birth date and serial number
       @control_digit = luhn_algorithm("#{$~[1]}#{$~[2]}#{$~[3]}#{$~[5]}")
