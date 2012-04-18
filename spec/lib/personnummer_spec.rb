@@ -9,36 +9,44 @@ describe Personnummer do
       expect{ Personnummer.new(9001010017) }.not_to raise_error(ArgumentError)
       expect{ Personnummer.new('900101-0017') }.not_to raise_error(ArgumentError)
       expect{ Personnummer.new('100101+0017') }.not_to raise_error(ArgumentError)
+      expect{ Personnummer.new('19900101-0017') }.not_to raise_error(ArgumentError)
     end
 
     it "accepts a valid personnummer (without control digit)" do
       expect{ Personnummer.new(900101001) }.not_to raise_error(ArgumentError)
       expect{ Personnummer.new('900101-001') }.not_to raise_error(ArgumentError)
       expect{ Personnummer.new('100101+001') }.not_to raise_error(ArgumentError)
+      expect{ Personnummer.new('19900101-001') }.not_to raise_error(ArgumentError)
     end
 
     it "throws ArgumentError on an invalid personnummer" do
       expect{ Personnummer.new(nil) }.to raise_error(ArgumentError)
       expect{ Personnummer.new(17) }.to raise_error(ArgumentError)
       expect{ Personnummer.new('112233-4455') }.to raise_error(ArgumentError)
+      expect{ Personnummer.new('19112233-4455') }.to raise_error(ArgumentError)
     end
   end
 
   describe "age" do
     it "calculates age correctly" do
       p = Personnummer.new('900101-001')
+      p2 = Personnummer.new('19900101-001')
 
       Timecop.freeze(Date.parse('1980-01-01')) do
         p.age.should == 0
+        p2.age.should == 0
       end
       Timecop.freeze(Date.parse('1990-01-01')) do
         p.age.should == 0
+        p2.age.should == 0
       end
       Timecop.freeze(Date.parse('2000-01-01')) do
         p.age.should == 10
+        p2.age.should == 10
       end
       Timecop.freeze(Date.parse('2090-01-01')) do
         p.age.should == 100
+        p2.age.should == 100
       end
     end
   end
@@ -49,6 +57,8 @@ describe Personnummer do
         Personnummer.new('900101-001').born.should == Date.parse('1990-01-01')
         Personnummer.new('010101-001').born.should == Date.parse('2001-01-01')
         Personnummer.new('100101+001').born.should == Date.parse('1810-01-01')
+        Personnummer.new('19900101-001').born.should == Date.parse('1990-01-01')
+        Personnummer.new('18900101-001').born.should == Date.parse('1890-01-01')
       end
     end
   end
@@ -101,6 +111,8 @@ describe Personnummer do
       Personnummer.new(9001010017).to_s.should == '900101-0017'
       Personnummer.new('900101-0017').to_s.should == '900101-0017'
       Personnummer.new('900101-001').to_s.should == '900101-0017'
+      Personnummer.new('19900101-001').to_s.should == '900101-0017'
+      Personnummer.new('18900101-001').to_s.should == '900101-0017'
     end
   end
 

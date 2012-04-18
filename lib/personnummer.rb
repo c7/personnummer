@@ -10,17 +10,18 @@ class Personnummer
 
     # Match the number
     number = number.to_s
-    if number.match(/(\d{2})(\d{2})(\d{2})([\-\+]{0,1})(\d{3})(\d{0,1})/)
+    if number.match(/(\d{2}){0,1}(\d{2})(\d{2})(\d{2})([\-\+]{0,1})(\d{3})(\d{0,1})/)
 
       # Calculate the control digit based on the birth date and serial number
-      @control_digit = luhn_algorithm("#{$~[1]}#{$~[2]}#{$~[3]}#{$~[5]}")
+      @control_digit = luhn_algorithm("#{$~[2]}#{$~[3]}#{$~[4]}#{$~[6]}")
 
       # Get the different parts of the number
-      year     = $~[1].to_i
-      month    = $~[2].to_i
-      day      = $~[3].to_i
-      @divider  = $~[4]
-      @serial   = $~[5].to_i
+      century  = $~[1].to_i
+      year     = $~[2].to_i
+      month    = $~[3].to_i
+      day      = $~[4].to_i
+      @divider  = $~[5]
+      @serial   = $~[6].to_i
 
       # Set default divider if not present
       if @divider.empty?
@@ -28,20 +29,24 @@ class Personnummer
       end
 
       # Make the personnummer valid if the checksum is correct
-      @valid = true if @control_digit == $~[6].to_i && !$~[6].empty?
+      @valid = true if @control_digit == $~[7].to_i && !$~[7].empty?
 
       # Get the current date
       today = Date.today
 
-      # Decide which century corresponds to the number
-      if year < (today.year-2000) && @divider == '-'
-        century = 2000
-      elsif year < (today.year-2000) && @divider == '+'
-        century = 1900
-      elsif @divider == '+'
-        century = 1800
+      if century == 0
+        # Decide which century corresponds to the number
+        if year < (today.year-2000) && @divider == '-'
+          century = 2000
+        elsif year < (today.year-2000) && @divider == '+'
+          century = 1900
+        elsif @divider == '+'
+          century = 1800
+        else
+          century = 1900
+        end
       else
-        century = 1900
+        century *= 100
       end
 
       # Get the date the person was born
