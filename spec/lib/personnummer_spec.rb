@@ -105,9 +105,10 @@ describe Personnummer do
       Personnummer.new('900101-001').control_digit.should == 7
     end
 
-    it "should not alter existing control digit" do
-      pnr = "901010-0010"
-      Personnummer.new(pnr).to_s.should == pnr
+    it "should not alter existing control digit, even if it is invalid" do
+      p = Personnummer.new("901010-0010")
+      p.to_s.should == "901010-0010"
+      p.should_not be_valid
     end
   end
 
