@@ -13,7 +13,10 @@ class Personnummer
     if number.match(/(\d{2}){0,1}(\d{2})(\d{2})(\d{2})([\-\+]{0,1})(\d{3})(\d{0,1})/)
 
       # Calculate the control digit based on the birth date and serial number
-      @control_digit = luhn_algorithm("#{$~[2]}#{$~[3]}#{$~[4]}#{$~[6]}")
+      cd = luhn_algorithm("#{$~[2]}#{$~[3]}#{$~[4]}#{$~[6]}")
+
+      # Set control digit to calculated if it's missing
+      @control_digit = $~[7].blank? ? cd : $~[7].to_i
 
       # Get the different parts of the number
       century  = $~[1].to_i
@@ -29,7 +32,7 @@ class Personnummer
       end
 
       # Make the personnummer valid if the checksum is correct
-      @valid = true if @control_digit == $~[7].to_i && !$~[7].empty?
+      @valid = true if @control_digit == cd && !$~[7].empty?
 
       # Get the current date
       today = Date.today
