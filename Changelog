@@ -1,14 +1,18 @@
+0.0.7 Released
+
+  2012-09-12: Don't alter an existing control digit, even if it’s wrong
+
 0.0.6 Released
 
-	2011-04-18: Now supports century if given
+  2011-04-18: Now supports century if given
 
 0.0.5 Released
 
-	2011-11-25: Tests!
+  2011-11-25: Tests!
 
 0.0.4 Released
 
-	2011-01-09: Ruby 1.9 support
+  2011-01-09: Ruby 1.9 support
 
 0.0.3 Released
 
