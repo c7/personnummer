@@ -16,7 +16,7 @@ class Personnummer
       cd = luhn_algorithm("#{$~[2]}#{$~[3]}#{$~[4]}#{$~[6]}")
 
       # Set control digit to calculated if it's missing
-      @control_digit = $~[7].blank? ? cd : $~[7].to_i
+      @control_digit = $~[7].nil? || $~[7].empty? ? cd : $~[7].to_i
 
       # Get the different parts of the number
       century  = $~[1].to_i
@@ -99,13 +99,13 @@ private
           multiplications << digit.to_i*2
         else
           multiplications << digit.to_i
-        end
+      end
     end
 
     sum = 0
 
-    multiplications.each do |number|
-      number.to_s.each_byte do |character|
+    multiplications.each do |num|
+      num.to_s.each_byte do |character|
         sum += character.chr.to_i
       end
     end
