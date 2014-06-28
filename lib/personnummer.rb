@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require 'date'
+require File.join(File.dirname(__FILE__), 'personnummer_date')
 
 class Personnummer
   # Public readonly attributes
@@ -34,26 +34,30 @@ class Personnummer
       # Make the personnummer valid if the checksum is correct
       @valid = true if @control_digit == cd && !$~[7].empty?
 
-      # Get the current date
-      today = Date.today
 
-      if century == 0
-        # Decide which century corresponds to the number
-        if year < (today.year-2000) && @divider == '-'
-          century = 2000
-        elsif year < (today.year-2000) && @divider == '+'
-          century = 1900
-        elsif @divider == '+'
-          century = 1800
-        else
-          century = 1900
-        end
-      else
-        century *= 100
-      end
+      @born = PersonnummerDate.new(century, year, month, day, @divider)
+      @valid = @born.valid? && @valid
 
-      # Get the date the person was born
-      @born   = Date.parse("#{century+year}-#{month}-#{day}")
+      # # Get the current date
+      # today = Date.today
+
+      # if century == 0
+      #   # Decide which century corresponds to the number
+      #   if year < (today.year-2000) && @divider == '-'
+      #     century = 2000
+      #   elsif year < (today.year-2000) && @divider == '+'
+      #     century = 1900
+      #   elsif @divider == '+'
+      #     century = 1800
+      #   else
+      #     century = 1900
+      #   end
+      # else
+      #   century *= 100
+      # end
+
+      # # Get the date the person was born
+      # @born   = Date.parse("#{century+year}-#{month}-#{day}")
 
       # Get the region name
       @region = region_name(@serial)
@@ -66,15 +70,15 @@ class Personnummer
   end
 
   def age
-    if Date.today > @born
-      (Date.today - @born).to_i/365
-    else
-      0
-    end
+    @born.age
+  end
+
+  def born_at
+    @born.to_date
   end
 
   def to_s
-    "%s%s%03d%d" % [@born.strftime("%y%m%d"), @divider, @serial, @control_digit]
+    "%s%s%03d%d" % [born_at.strftime("%y%m%d"), @divider, @serial, @control_digit]
   end
 
   def valid?
@@ -89,6 +93,10 @@ class Personnummer
     @female
   end
 
+
+  def co_ordination_number?
+    @born.co_ordination_number?
+  end
 private
 
   def luhn_algorithm(number)
