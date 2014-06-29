@@ -23,8 +23,8 @@ These numbers are obtained by adding 60 to the day of the birth date
 
 <pre>
 &gt;&gt; p = Personnummer.new('830488-5912')
-=&gt; #&lt;Personnummer:0x007fbafd1458d8 @valid=false, @control_digit=2, @divider="-", @serial=591, @born=#&lt;PersonnummerDate:0x007fbafd144af0 @divider="-", @day=88, @month=4, @year=1983&gt;, @region="Skaraborgs län", @female=false&gt;
-&gt;&gt; p.born_at
+=&gt; #&lt;Personnummer:0x007fbafd1458d8 ...&gt;
+&gt;&gt; p.born
 =&gt; #&lt;Date: 1983-04-28 ((2445453j,0s,0n),+0s,2299161j)&gt;
 &gt;&gt; p.co_ordination_number?
 =&gt; true
