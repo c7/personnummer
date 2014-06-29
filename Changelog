@@ -1,3 +1,7 @@
+0.0.8 Released
+
+  2014-06-29: Support for co-ordination numbers (theneubeck)
+
 0.0.7 Released
 
   2012-09-12: Don't alter an existing control digit, even if it’s wrong
