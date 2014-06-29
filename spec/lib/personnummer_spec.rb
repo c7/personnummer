@@ -54,11 +54,11 @@ describe Personnummer do
   describe "born" do
     it "returns the correct date" do
       Timecop.freeze(Date.parse('2010-01-01')) do
-        Personnummer.new('900101-001').born.should == Date.parse('1990-01-01')
-        Personnummer.new('010101-001').born.should == Date.parse('2001-01-01')
-        Personnummer.new('100101+001').born.should == Date.parse('1810-01-01')
-        Personnummer.new('19900101-001').born.should == Date.parse('1990-01-01')
-        Personnummer.new('18900101-001').born.should == Date.parse('1890-01-01')
+        Personnummer.new('900101-001').born.to_date.should == Date.parse('1990-01-01')
+        Personnummer.new('010101-001').born.to_date.should == Date.parse('2001-01-01')
+        Personnummer.new('100101+001').born.to_date.should == Date.parse('1810-01-01')
+        Personnummer.new('19900101-001').born.to_date.should == Date.parse('1990-01-01')
+        Personnummer.new('18900101-001').born.to_date.should == Date.parse('1890-01-01')
       end
     end
   end
@@ -151,6 +151,18 @@ describe Personnummer do
       Personnummer.new('900101-004').should be_female
       Personnummer.new('900101-006').should be_female
       Personnummer.new('900101-008').should be_female
+    end
+  end
+
+  describe "co-ordination number" do
+    it "should accept a samordningsnummer" do
+      Personnummer.new('701063-2391').should be_valid
+    end
+    it "should not accept an invalid samordningsnummer with less than 62" do
+      Personnummer.new('900161-0017').should_not be_valid
+    end
+    it "should not accept an invalid samordningsnummer with more than 90" do
+      Personnummer.new('900191-0017').should_not be_valid
     end
   end
 
