@@ -36,14 +36,17 @@ describe Personnummer do
         p.age.should == 0
         p2.age.should == 0
       end
+
       Timecop.freeze(Date.parse('1990-01-01')) do
         p.age.should == 0
         p2.age.should == 0
       end
+
       Timecop.freeze(Date.parse('2000-01-01')) do
         p.age.should == 10
         p2.age.should == 10
       end
+
       Timecop.freeze(Date.parse('2090-01-01')) do
         p.age.should == 100
         p2.age.should == 100
@@ -54,11 +57,11 @@ describe Personnummer do
   describe "born" do
     it "returns the correct date" do
       Timecop.freeze(Date.parse('2010-01-01')) do
-        Personnummer.new('900101-001').born.to_date.should == Date.parse('1990-01-01')
-        Personnummer.new('010101-001').born.to_date.should == Date.parse('2001-01-01')
-        Personnummer.new('100101+001').born.to_date.should == Date.parse('1810-01-01')
-        Personnummer.new('19900101-001').born.to_date.should == Date.parse('1990-01-01')
-        Personnummer.new('18900101-001').born.to_date.should == Date.parse('1890-01-01')
+        Personnummer.new('900101-001').born.should == Date.parse('1990-01-01')
+        Personnummer.new('010101-001').born.should == Date.parse('2001-01-01')
+        Personnummer.new('100101+001').born.should == Date.parse('1810-01-01')
+        Personnummer.new('19900101-001').born.should == Date.parse('1990-01-01')
+        Personnummer.new('18900101-001').born.should == Date.parse('1890-01-01')
       end
     end
   end
@@ -165,8 +168,6 @@ describe Personnummer do
       Personnummer.new('900191-0017').should_not be_valid
     end
   end
-
-private
 
   def it_maps_range_to_region(range, region)
     Personnummer.new('901231-%03d' % range.first).region.should == region

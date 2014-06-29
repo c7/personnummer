@@ -1,17 +1,17 @@
 # -*- encoding: utf-8 -*-
-require File.join(File.dirname(__FILE__), 'personnummer_date')
+require 'date'
 
 class Personnummer
   # Public readonly attributes
-  attr_reader :born, :region, :control_digit
+  attr_reader :region, :control_digit
 
   def initialize(number)
     @valid = false
 
     # Match the number
     number = number.to_s
-    if number.match(/(\d{2}){0,1}(\d{2})(\d{2})(\d{2})([\-\+]{0,1})(\d{3})(\d{0,1})/)
 
+    if number.match(/(\d{2}){0,1}(\d{2})(\d{2})(\d{2})([\-\+]{0,1})(\d{3})(\d{0,1})/)
       # Calculate the control digit based on the birth date and serial number
       cd = luhn_algorithm("#{$~[2]}#{$~[3]}#{$~[4]}#{$~[6]}")
 
@@ -34,30 +34,8 @@ class Personnummer
       # Make the personnummer valid if the checksum is correct
       @valid = true if @control_digit == cd && !$~[7].empty?
 
-
-      @born = PersonnummerDate.new(century, year, month, day, @divider)
+      @born  = Born.new(century, year, month, day, @divider)
       @valid = @born.valid? && @valid
-
-      # # Get the current date
-      # today = Date.today
-
-      # if century == 0
-      #   # Decide which century corresponds to the number
-      #   if year < (today.year-2000) && @divider == '-'
-      #     century = 2000
-      #   elsif year < (today.year-2000) && @divider == '+'
-      #     century = 1900
-      #   elsif @divider == '+'
-      #     century = 1800
-      #   else
-      #     century = 1900
-      #   end
-      # else
-      #   century *= 100
-      # end
-
-      # # Get the date the person was born
-      # @born   = Date.parse("#{century+year}-#{month}-#{day}")
 
       # Get the region name
       @region = region_name(@serial)
@@ -73,12 +51,12 @@ class Personnummer
     @born.age
   end
 
-  def born_at
+  def born
     @born.to_date
   end
 
   def to_s
-    "%s%s%03d%d" % [born_at.strftime("%y%m%d"), @divider, @serial, @control_digit]
+    "%s%s%03d%d" % [born.strftime("%y%m%d"), @divider, @serial, @control_digit]
   end
 
   def valid?
@@ -93,10 +71,10 @@ class Personnummer
     @female
   end
 
-
   def co_ordination_number?
     @born.co_ordination_number?
   end
+
 private
 
   def luhn_algorithm(number)
@@ -161,6 +139,65 @@ private
       when 850..889 then 'Västerbottens län'
       when 890..929 then 'Norrbottens län'
       when 930..999 then 'Födda utomlands eller utländska medborgare födda i Sverige'
+    end
+  end
+
+  class Born
+    attr_reader :year, :month
+
+    def initialize(century, year, month, day, divider)
+      @divider = divider
+      @day     = day
+      @month   = month
+      @year    = calculate_century(century, year) + year
+    end
+
+    def day
+      co_ordination_number? ? @day - 60 : @day
+    end
+
+    def co_ordination_number?
+      @day && 60 < @day and @day < 92
+    end
+
+    def to_date
+      Date.parse("#{year}-#{month}-#{day}")
+    end
+
+    def valid?
+      to_date && true
+    end
+
+    def age
+      if Date.today > to_date
+        (Date.today - to_date).to_i/365
+      else
+        0
+      end
+    end
+
+    private
+
+    def calculate_century(century, year)
+      # Get the current date
+      today = Date.today
+
+      if century == 0
+        # Decide which century corresponds to the number
+        if year < (today.year-2000) && @divider == '-'
+          century = 2000
+        elsif year < (today.year-2000) && @divider == '+'
+          century = 1900
+        elsif @divider == '+'
+          century = 1800
+        else
+          century = 1900
+        end
+      else
+        century *= 100
+      end
+
+      return century
     end
   end
 end
