@@ -8,12 +8,13 @@ Personnummer is a ruby class that handles [Swedish personal identity number](htt
 
 ### Example usage
 
-<pre>&gt;&gt; p = Personnummer.new('830428-5912')
-#&gt;&gt;Personnummer:0x007fc971369100 @valid=true, @control_digit=2, @divider="-", @serial=591, @born=#&gt;&gt;PersonnummerDate:0x007fc971368318 @divider="-", @day=28, @month=4, @year=1983&gt; #&lt;, @region="Skaraborgs län", @female=false&gt; #&lt;
+```
+>> p = Personnummer.new('830428-5912')
+#>>Personnummer:0x007fc971369100 @valid=true, @control_digit=2, @divider="-", @serial=591, @born=#>>PersonnummerDate:0x007fc971368318 @divider="-", @day=28, @month=4, @year=1983> #<, @region="Skaraborgs län", @female=false> #<
 
-&gt;&gt; p.valid?
-=&gt; true</pre>
-</pre>
+>> p.valid?
+=> true
+```
 
 ### This implementation also supports co-ordination numbers
 
@@ -21,11 +22,11 @@ Personnummer is a ruby class that handles [Swedish personal identity number](htt
 
 These numbers are obtained by adding 60 to the day of the birth date
 
-<pre>
-&gt;&gt; p = Personnummer.new('830488-5912')
-=&gt; #&lt;Personnummer:0x007fbafd1458d8 ...&gt;
-&gt;&gt; p.born
-=&gt; #&lt;Date: 1983-04-28 ((2445453j,0s,0n),+0s,2299161j)&gt;
-&gt;&gt; p.co_ordination_number?
-=&gt; true
-</pre>
+```
+>> p = Personnummer.new('830488-5912')
+=> #<Personnummer:0x007fbafd1458d8 ...>
+>> p.born
+=> #<Date: 1983-04-28 ((2445453j,0s,0n),+0s,2299161j)>
+>> p.co_ordination_number?
+=> true
+```
