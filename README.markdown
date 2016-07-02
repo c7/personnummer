@@ -14,6 +14,9 @@ Personnummer is a ruby class that handles [Swedish personal identity number](htt
 
 >> p.valid?
 => true
+
+>> p = Personnummer.new('830428')
+=> ArgumentError: The supplied personnummer is invalid
 ```
 
 ### This implementation also supports co-ordination numbers
