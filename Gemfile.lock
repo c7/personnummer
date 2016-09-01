@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    personnummer (0.0.8)
+    personnummer (0.0.9)
 
 GEM
   remote: http://rubygems.org/
@@ -39,3 +39,6 @@ DEPENDENCIES
   rake
   rspec
   timecop
+
+BUNDLED WITH
+   1.11.2
