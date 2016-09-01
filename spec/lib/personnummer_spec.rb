@@ -122,6 +122,7 @@ describe Personnummer do
       Personnummer.new('900101-001').to_s.should == '900101-0017'
       Personnummer.new('19900101-001').to_s.should == '900101-0017'
       Personnummer.new('18900101-001').to_s.should == '900101-0017'
+      Personnummer.new('7010632391').to_s.should == '701063-2391' # Samordningsnummer
     end
   end
 
