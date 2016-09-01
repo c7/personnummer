@@ -56,7 +56,14 @@ class Personnummer
   end
 
   def to_s
-    "%s%s%03d%d" % [born.strftime("%y%m%d"), @divider, @serial, @control_digit]
+    born_string = born.strftime("%y%m%d")
+
+    if co_ordination_number?
+      day = born_string[4..6].to_i + 60
+      born_string = [born_string[0..3], "%02d" % day].join
+    end
+
+    "%s%s%03d%d" % [born_string, @divider, @serial, @control_digit]
   end
 
   def valid?
