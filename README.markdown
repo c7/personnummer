@@ -34,6 +34,18 @@ These numbers are obtained by adding 60 to the day of the birth date
 => true
 ```
 
+### Equality
+
+```
+>> p1 = Personnummer.new(8304285912)
+=> #<Personnummer:0x007fb8fd816588 @valid=true, @control_digit=2, @divider="-", @serial=591, @born=#<Personnummer::Born:0x007fb8fd80fa80 @divider="-", @day=28, @month=4, @year=1983>, @region="Skaraborgs län", @female=false>
+
+>> p1 == 8304285912
+=> true
+p1 == '8304285912'
+=> true
+```
+
 ### Note on "reservnummer"
 
 "Reservnummer" is used in some special cases. There are only recommendations how it should be formatted, no formalized standard.

@@ -170,6 +170,30 @@ describe Personnummer do
     end
   end
 
+  describe "equality" do
+    it "true when equal" do
+      personummer1 = Personnummer.new('900101-001')
+      personummer2 = Personnummer.new('900101-001')
+      (personummer1 == personummer2).should == true
+    end
+
+    it "true when equal and passed equal string" do
+      personummer1 = Personnummer.new('900101-001')
+      (personummer1 == '900101-001').should == true
+    end
+
+    it "true when equal and passed equal integer" do
+      personummer1 = Personnummer.new('900101-001')
+      (personummer1 == 900101001).should == true
+    end
+
+    it "false non-equal objects" do
+      personummer1 = Personnummer.new('900101-001')
+      personummer2 = Personnummer.new('900101-002')
+      (personummer1 == personummer2).should == false
+    end
+  end
+
   def it_maps_range_to_region(range, region)
     Personnummer.new('901231-%03d' % range.first).region.should == region
     Personnummer.new('901231-%03d' % range.last).region.should == region
