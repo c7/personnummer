@@ -33,3 +33,9 @@ These numbers are obtained by adding 60 to the day of the birth date
 >> p.co_ordination_number?
 => true
 ```
+
+### Note on "reservnummer"
+
+"Reservnummer" is used in some special cases. There are only recommendations how it should be formatted, no formalized standard.
+
+You can read more about it on [wikipedia](https://sv.wikipedia.org/wiki/Reservnummer#Format).
