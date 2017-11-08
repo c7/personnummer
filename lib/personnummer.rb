@@ -55,6 +55,12 @@ class Personnummer
     @born.to_date
   end
 
+  def ==(other)
+    other = self.class.new(other) if other.is_a?(String) || other.is_a?(Integer)
+
+    to_s == other.to_s
+  end
+
   def to_s
     born_string = born.strftime("%y%m%d")
 
