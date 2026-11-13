@@ -1,3 +1,24 @@
+> [!WARNING]
+> **This project is no longer maintained and has been archived.**
+>
+> The [`personnummer`](https://rubygems.org/gems/personnummer) gem name has been
+> handed over to the [personnummer organisation](https://github.com/personnummer),
+> which maintains Ruby and other language packages for validating Swedish personal
+> identity numbers.
+>
+> **For new projects, please use [personnummer/ruby](https://github.com/personnummer/ruby):**
+>
+> ```ruby
+> gem "personnummer", "~> 3.0"
+> ```
+>
+> Note that the API has changed — e.g. `Personnummer.valid?("8507099805")` instead
+> of `Personnummer.new(...)`. See the [personnummer/ruby README](https://github.com/personnummer/ruby#readme)
+> for details.
+>
+> Versions `~> 0.1` of this gem remain available on RubyGems and will continue to
+> work in existing Gemfiles, but will receive no further updates.
+
 # Personnummer
 
 Personnummer is a ruby class that handles [Swedish personal identity number](http://en.wikipedia.org/wiki/Personal_identity_number_(Sweden)).
